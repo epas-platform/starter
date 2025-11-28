@@ -1,0 +1,131 @@
+services:
+  # FastAPI Backend
+  backend:
+    container_name: cradle-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8010:8000"
+    volumes:
+      - ./backend/app:/app/app:cached
+      - ./config:/app/config:ro
+    environment:
+      - PROFILE=dev
+      - DATABASE_URL=postgresql+asyncpg://cradle:cradle@postgres:5432/cradle
+      - REDIS_URL=redis://redis:6379/0
+      - AWS_ENDPOINT_URL=http://localstack:4566
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_DEFAULT_REGION=us-east-1
+      - JWT_SECRET=dev-jwt-secret-change-in-production-32chars
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      localstack:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - cradle-network
+
+  # Next.js Frontend
+  frontend:
+    container_name: cradle-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3010:3000"
+    volumes:
+      - ./frontend/src:/app/src:cached
+      - ./frontend/public:/app/public:cached
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8010
+      - WATCHPACK_POLLING=true
+    depends_on:
+      - backend
+    command: npm run dev
+    networks:
+      - cradle-network
+
+  # PostgreSQL Database
+  postgres:
+    container_name: cradle-postgres
+    image: postgres:15-alpine
+    ports:
+      - "5442:5432"
+    environment:
+      POSTGRES_USER: cradle
+      POSTGRES_PASSWORD: cradle
+      POSTGRES_DB: cradle
+    volumes:
+      - cradle_postgres_data:/var/lib/postgresql/data
+      - ./infra/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cradle"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - cradle-network
+
+  # Redis Cache
+  redis:
+    container_name: cradle-redis
+    image: redis:7-alpine
+    ports:
+      - "6389:6379"
+    volumes:
+      - cradle_redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - cradle-network
+
+  # LocalStack (AWS Emulation)
+  localstack:
+    container_name: cradle-localstack
+    image: localstack/localstack:3.0
+    ports:
+      - "4576:4566"
+    environment:
+      - SERVICES=s3,secretsmanager
+      - DEBUG=0
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - cradle_localstack_data:/var/lib/localstack
+      - ./infra/localstack/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - cradle-network
+
+networks:
+  cradle-network:
+    name: cradle-network
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
+
+volumes:
+  cradle_postgres_data:
+  cradle_redis_data:
+  cradle_localstack_data:

@@ -1,0 +1,32 @@
+{
+  "projectName": "Cradle",
+  "description": "Enterprise Multi-Platform Architecture",
+  "primaryColor": "blue",
+  "pages": [
+    {
+      "name": "Dashboard",
+      "path": "dashboard",
+      "icon": "home",
+      "description": "Main dashboard with overview"
+    },
+    {
+      "name": "Settings",
+      "path": "settings",
+      "icon": "cog",
+      "description": "User and system settings"
+    }
+  ],
+  "features": {
+    "aiDisclosure": true,
+    "darkMode": true,
+    "multiTenant": true
+  },
+  "auth": {
+    "defaultEmail": "admin@example.com",
+    "defaultPassword": "password"
+  },
+  "branding": {
+    "logoText": null,
+    "tagline": null
+  }
+}

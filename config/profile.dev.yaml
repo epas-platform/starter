@@ -1,0 +1,47 @@
+# Development Profile Configuration
+# Non-sensitive settings only - secrets go in SecretVault
+
+app:
+  name: Cradle
+  debug: true
+  docs_enabled: true
+
+server:
+  host: 0.0.0.0
+  port: 8000
+  reload: true
+
+cors:
+  origins:
+    - http://localhost:3010
+    - http://localhost:3000
+    - http://127.0.0.1:3010
+    - http://127.0.0.1:3000
+  allow_credentials: true
+  allow_methods:
+    - "*"
+  allow_headers:
+    - "*"
+
+rate_limit:
+  enabled: false
+  requests_per_minute: 60
+
+auth:
+  jwt_algorithm: HS256
+  access_token_expire_minutes: 30
+  refresh_token_expire_days: 7
+
+aws:
+  region: us-east-1
+  s3:
+    uploads_bucket: cradle-uploads
+    exports_bucket: cradle-exports
+
+logging:
+  level: DEBUG
+  format: json
+
+features:
+  audit_logging: true
+  ai_disclosure: true

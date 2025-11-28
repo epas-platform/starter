@@ -1,0 +1,50 @@
+# Production Profile Configuration
+# Non-sensitive settings only - secrets go in SecretVault
+
+app:
+  name: Cradle
+  debug: false
+  docs_enabled: false  # Disable /docs in production
+
+server:
+  host: 0.0.0.0
+  port: 8000
+  reload: false
+
+cors:
+  origins: []  # Set via environment variable in production
+  allow_credentials: true
+  allow_methods:
+    - GET
+    - POST
+    - PUT
+    - DELETE
+    - PATCH
+  allow_headers:
+    - Authorization
+    - Content-Type
+    - X-Request-ID
+    - X-Tenant-ID
+
+rate_limit:
+  enabled: true
+  requests_per_minute: 60
+
+auth:
+  jwt_algorithm: HS256
+  access_token_expire_minutes: 15
+  refresh_token_expire_days: 7
+
+aws:
+  region: us-east-1
+  s3:
+    uploads_bucket: cradle-uploads
+    exports_bucket: cradle-exports
+
+logging:
+  level: INFO
+  format: json
+
+features:
+  audit_logging: true
+  ai_disclosure: true
