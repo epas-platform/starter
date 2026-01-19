@@ -1,0 +1,43 @@
+# EPAS Starter
+
+> Reference implementation of the Enterprise Platform Architecture Specification (EPAS).
+
+## Quick Start
+- Setup: /quickstart.sh
+- Docker: /docker-compose.yml
+
+## Architecture
+- Gap Analysis: /1.4 Planning/toolcradle-gap-analysis.md
+- Current structure:
+  - Backend API: /backend/
+  - Frontend: /frontend/
+
+## Planned Structure (v1.4)
+```
+packages/
+  api/      # FastAPI service
+  sdk/      # Python SDK (new)
+  mcp/      # MCP server (new)
+  cli/      # CLI tool (new)
+  web/      # Next.js frontend
+```
+
+## Key Files
+- API entry: /backend/app/main.py
+- Config: /backend/app/config.py
+- Models: /backend/app/models/
+- Abstractions: /backend/app/abstractions/
+
+## Abstractions (Good Patterns)
+- SecretVault: /backend/app/abstractions/secret_vault.py
+- BlobStore: /backend/app/abstractions/blob_store.py
+- AuditLogger: /backend/app/abstractions/audit_logger.py
+
+## Frontend
+- Entry: /frontend/src/app/
+- Components: /frontend/src/components/
+- API client: /frontend/src/lib/api.ts
+
+## Agent Context
+- Coding rules: /1.4 Planning/CLAUDE.md
+- Gap analysis: /1.4 Planning/toolcradle-gap-analysis.md
