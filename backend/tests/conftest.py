@@ -16,7 +16,7 @@ from app.models.base import Base
 
 
 # Test database URL (use separate test database)
-TEST_DATABASE_URL = "postgresql+asyncpg://jarvis:jarvis@localhost:5432/jarvis_test"
+TEST_DATABASE_URL = "postgresql+asyncpg://cradle:cradle@localhost:5432/cradle_test"
 
 
 @pytest.fixture(scope="session")
