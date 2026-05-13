@@ -2,7 +2,7 @@
 # Non-sensitive settings only - secrets go in SecretVault
 
 app:
-  name: Cradle
+  name: EPAS Starter
   debug: true
   docs_enabled: true
 

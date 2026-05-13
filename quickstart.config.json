@@ -1,6 +1,6 @@
 {
-  "projectName": "Cradle",
-  "description": "Enterprise Multi-Platform Architecture",
+  "projectName": "EPAS Starter",
+  "description": "EPAS reference implementation starter",
   "primaryColor": "blue",
   "pages": [
     {
