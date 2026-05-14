@@ -1,8 +1,8 @@
-# Cradle
+# EPAS Starter
 
-> *"The Regeneration Cradle - where new creations are born."*
+> Reference implementation for EPAS 2.1 profile-layer aligned applications.
 
-Enterprise Multi-Platform Architecture Boilerplate. A production-ready foundation for building modern web applications.
+FastAPI + Next.js starter template for building EPAS-aligned applications with a practical default stack.
 
 ## Stack
 
@@ -64,10 +64,15 @@ Password: password
 - Health checks on all services
 
 ### Abstractions
-Based on the Enterprise Multi-Platform Architecture Specification:
+Based on the Enterprise Platform Architecture Specification:
 - **SecretVault**: Unified interface for secrets management
 - **BlobStore**: Unified interface for object storage (S3)
 - **AuditLogger**: Compliance-ready audit logging foundation
+
+### EPAS Alignment
+- EPAS v2.1 profile-layer friendly defaults
+- Profile-based configuration for dev/prod
+- Reference stack designed to stay close to the published spec
 
 ## Project Structure
 
@@ -143,8 +148,8 @@ Edit `quickstart.config.json` to customize:
 
 ```json
 {
-  "projectName": "Cradle",
-  "description": "Enterprise Multi-Platform Architecture",
+  "projectName": "EPAS Starter",
+  "description": "EPAS reference implementation starter",
   "primaryColor": "blue",
   "features": {
     "darkMode": true,

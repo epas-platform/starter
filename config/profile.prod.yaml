@@ -2,7 +2,7 @@
 # Non-sensitive settings only - secrets go in SecretVault
 
 app:
-  name: Cradle
+  name: EPAS Starter
   debug: false
   docs_enabled: false  # Disable /docs in production
 
