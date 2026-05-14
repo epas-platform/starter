@@ -49,7 +49,7 @@ export default function LoginPage() {
 
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-3xl font-bold">Cradle</CardTitle>
+          <CardTitle className="text-3xl font-bold">EPAS Prototype</CardTitle>
           <CardDescription>
             {isRegister ? 'Create an account' : 'Sign in to your account'}
           </CardDescription>

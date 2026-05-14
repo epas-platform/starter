@@ -1,0 +1,49 @@
+{
+  "bundleId": "entity-native-mvp",
+  "bundleName": "EPAS MVP - Entity Native",
+  "projectName": "EPAS MVP",
+  "description": "MVP starter for entity-and-relationship-native applications.",
+  "primaryColor": "blue",
+  "pages": [
+    { "name": "Dashboard", "path": "dashboard", "icon": "home", "description": "MVP dashboard" },
+    { "name": "Workspace", "path": "workspace", "icon": "folder", "description": "Active work items" },
+    { "name": "Graph", "path": "graph", "icon": "chart-bar", "description": "Entity graph explorer" },
+    { "name": "Approvals", "path": "approvals", "icon": "users", "description": "Governance approvals" },
+    { "name": "Settings", "path": "settings", "icon": "cog", "description": "Project settings" }
+  ],
+  "features": {
+    "aiDisclosure": true,
+    "darkMode": true,
+    "multiTenant": true
+  },
+  "auth": {
+    "defaultEmail": "admin@example.com",
+    "defaultPassword": "password"
+  },
+  "branding": {
+    "logoText": "Entity MVP",
+    "tagline": "Ship the graph with guardrails"
+  },
+  "epas": {
+    "base_version": "2.0.0",
+    "profile_version": "2.1.0",
+    "lifecycle": "mvp",
+    "audience": "customer_facing",
+    "environment": "staging_uat",
+    "governance": "g1_guided",
+    "infrastructure": "i2_platform_runtime",
+    "data_model": "entity_relationship_native",
+    "delivery": "sdk_first",
+    "architecture": "modular_monolith",
+    "overlays": ["entity_native_agentic"]
+  },
+  "stack": {
+    "backend": "FastAPI",
+    "frontend": "Next.js",
+    "database": "SurrealDB",
+    "eventing": "NATS-ready event log",
+    "auth": "OIDC-ready",
+    "storage": "Managed S3-compatible object store",
+    "notes": "Best default for agent-centric products."
+  }
+}

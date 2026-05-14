@@ -8,6 +8,7 @@ Can also run interactively to gather configuration.
 Usage:
     python scripts/configure.py              # Interactive mode
     python scripts/configure.py --from-file  # Apply from quickstart.config.json
+    python scripts/configure.py --bundle <id> --yes  # Apply a profile bundle noninteractively
     python scripts/configure.py --reset      # Reset to defaults
 """
 
@@ -17,6 +18,9 @@ import re
 import sys
 from pathlib import Path
 from typing import Any
+
+PROFILE_BUNDLES_DIR = Path("profiles")
+AUTO_CONFIRM = False
 
 # Color codes for terminal output
 class Colors:
@@ -116,6 +120,9 @@ def prompt_select(msg: str, options: list[str], default: int = 0) -> str:
 
 def prompt_yes_no(msg: str, default: bool = True) -> bool:
     """Prompt for yes/no answer."""
+    if AUTO_CONFIRM:
+        return True
+
     default_str = "Y/n" if default else "y/N"
     result = input(f"{Colors.CYAN}{msg} {Colors.NC}[{default_str}]: ").strip().lower()
     if not result:
@@ -132,13 +139,13 @@ def gather_config_interactive() -> dict[str, Any]:
 
     # Project name
     print_step("Step 1: Project Name")
-    config['projectName'] = prompt("Enter your project name", "Cradle")
+    config['projectName'] = prompt("Enter your project name", "EPAS Starter")
 
     # Description
     print_step("Step 2: Project Description")
     config['description'] = prompt(
         "Enter a short description",
-        "Enterprise Multi-Platform Architecture"
+        "EPAS reference implementation starter"
     )
 
     # Color scheme
@@ -192,6 +199,51 @@ def load_config_from_file(path: str = "quickstart.config.json") -> dict[str, Any
         return json.load(f)
 
 
+def list_profile_bundles() -> list[str]:
+    """List available profile bundles."""
+    if not PROFILE_BUNDLES_DIR.exists():
+        return []
+
+    bundles = []
+    for bundle_path in sorted(PROFILE_BUNDLES_DIR.glob("*.json")):
+        if bundle_path.name == "index.json":
+            continue
+        bundles.append(bundle_path.stem)
+    return bundles
+
+
+def load_config_from_bundle(bundle_id: str) -> dict[str, Any]:
+    """Load configuration from a profile bundle file."""
+    bundle_path = PROFILE_BUNDLES_DIR / f"{bundle_id}.json"
+    if not bundle_path.exists():
+        available = ", ".join(list_profile_bundles()) or "none"
+        raise FileNotFoundError(
+            f"Profile bundle not found: {bundle_id}. Available bundles: {available}"
+        )
+    with open(bundle_path, "r") as f:
+        return json.load(f)
+
+
+def load_profile_bundle_rows() -> list[dict[str, str]]:
+    """Load metadata for all profile bundles."""
+    rows = []
+    for bundle_id in list_profile_bundles():
+        bundle = load_config_from_bundle(bundle_id)
+        epas = bundle.get("epas", {})
+        stack = bundle.get("stack", {})
+        rows.append(
+            {
+                "bundle_id": bundle_id,
+                "bundle_name": bundle.get("bundleName", bundle_id),
+                "lifecycle": epas.get("lifecycle", "n/a"),
+                "audience": epas.get("audience", "n/a"),
+                "data_model": epas.get("data_model", "n/a"),
+                "database": stack.get("database", "n/a"),
+            }
+        )
+    return rows
+
+
 def save_config(config: dict[str, Any], path: str = "quickstart.config.json"):
     """Save configuration to JSON file."""
     with open(path, 'w') as f:
@@ -241,9 +293,8 @@ def replace_color_in_file(filepath: str, old_color: str, new_color: str):
 def apply_config(config: dict[str, Any]):
     """Apply configuration to the project."""
     project_name = config['projectName']
-    project_lower = project_name.lower()
+    project_slug = to_kebab_case(project_name)
     project_snake = to_snake_case(project_name)
-    project_kebab = to_kebab_case(project_name)
     description = config['description']
     primary_color = config['primaryColor']
     pages = config['pages']
@@ -251,7 +302,7 @@ def apply_config(config: dict[str, Any]):
     print_step("Applying configuration...")
 
     # Update backend
-    update_backend(project_name, project_lower, project_snake, description)
+    update_backend(project_name, project_slug, project_snake, description)
 
     # Update frontend
     update_frontend(project_name, project_snake, description, primary_color)
@@ -260,7 +311,7 @@ def apply_config(config: dict[str, Any]):
     create_pages(pages, project_name, primary_color)
 
     # Update infrastructure
-    update_infrastructure(project_lower)
+    update_infrastructure(project_name, project_slug, project_snake)
 
     # Update README
     update_readme(config)
@@ -268,13 +319,19 @@ def apply_config(config: dict[str, Any]):
     print_success("Configuration applied successfully!")
 
 
-def update_backend(name: str, name_lower: str, name_snake: str, desc: str):
+def update_backend(name: str, name_slug: str, name_snake: str, desc: str):
     """Update backend configuration."""
     print_step("Updating backend...")
 
     # config.py
     replace_in_file('backend/app/config.py', {
         'app_name: str = "Cradle"': f'app_name: str = "{name}"',
+        'default="postgresql+asyncpg://cradle:cradle@localhost:5432/cradle"':
+            f'default="postgresql+asyncpg://{name_snake}:{name_snake}@localhost:5432/{name_snake}"',
+        's3_uploads_bucket: str = "cradle-uploads"':
+            f's3_uploads_bucket: str = "{name_slug}-uploads"',
+        's3_exports_bucket: str = "cradle-exports"':
+            f's3_exports_bucket: str = "{name_slug}-exports"',
     })
 
     # main.py
@@ -282,14 +339,6 @@ def update_backend(name: str, name_lower: str, name_snake: str, desc: str):
         'title="Cradle"': f'title="{name}"',
         'description="Cradle API - Enterprise Multi-Platform Architecture"':
             f'description="{name} API - {desc}"',
-    })
-
-    # S3 bucket names in config
-    replace_in_file('backend/app/config.py', {
-        's3_uploads_bucket: str = "cradle-uploads"':
-            f's3_uploads_bucket: str = "{name_lower}-uploads"',
-        's3_exports_bucket: str = "cradle-exports"':
-            f's3_exports_bucket: str = "{name_lower}-exports"',
     })
 
     print_success("Backend updated")
@@ -515,29 +564,44 @@ export default function DashboardLayout({{
     print_success("Navigation updated")
 
 
-def update_infrastructure(name_lower: str):
+def update_infrastructure(name_display: str, name_slug: str, name_snake: str):
     """Update infrastructure configuration."""
     print_step("Updating infrastructure...")
 
     # docker-compose.yml
     replace_in_file('docker-compose.yml', {
-        'cradle-uploads': f'{name_lower}-uploads',
-        'cradle-exports': f'{name_lower}-exports',
-        'POSTGRES_DB: cradle': f'POSTGRES_DB: {name_lower}',
+        'cradle-uploads': f'{name_slug}-uploads',
+        'cradle-exports': f'{name_slug}-exports',
+        'POSTGRES_USER: cradle': f'POSTGRES_USER: {name_snake}',
+        'POSTGRES_PASSWORD: cradle': f'POSTGRES_PASSWORD: {name_snake}',
+        'POSTGRES_DB: cradle': f'POSTGRES_DB: {name_snake}',
+        'DATABASE_URL=postgresql+asyncpg://cradle:cradle@postgres:5432/cradle':
+            f'DATABASE_URL=postgresql+asyncpg://{name_snake}:{name_snake}@postgres:5432/{name_snake}',
     })
 
     # Profile configs
     for profile in ['dev', 'prod']:
         replace_in_file(f'config/profile.{profile}.yaml', {
-            'cradle-uploads': f'{name_lower}-uploads',
-            'cradle-exports': f'{name_lower}-exports',
+            'cradle-uploads': f'{name_slug}-uploads',
+            'cradle-exports': f'{name_slug}-exports',
+            'cradle': name_snake,
         })
 
     # LocalStack init
     replace_in_file('infra/localstack/init-aws.sh', {
-        'cradle-uploads': f'{name_lower}-uploads',
-        'cradle-exports': f'{name_lower}-exports',
-        'cradle/': f'{name_lower}/',
+        'cradle-uploads': f'{name_slug}-uploads',
+        'cradle-exports': f'{name_slug}-exports',
+        'cradle/': f'{name_slug}/',
+        '"username":"cradle"': f'"username":"{name_snake}"',
+        '"password":"cradle"': f'"password":"{name_snake}"',
+        '"dbname":"cradle"': f'"dbname":"{name_snake}"',
+    })
+
+    # Postgres initialization
+    replace_in_file('infra/postgres/init.sql', {
+        '-- Cradle Database Initialization': f'-- {name_display} Database Initialization',
+        'TO cradle;': f'TO {name_snake};',
+        'TO cradle': f'TO {name_snake}',
     })
 
     print_success("Infrastructure updated")
@@ -551,11 +615,47 @@ def update_readme(config: dict[str, Any]):
     desc = config['description']
     pages = config['pages']
     color = config['primaryColor']
+    suite_id = config.get("bundleId")
+    stack = config.get("stack", {})
+    epas = config.get("epas", {})
+    bundle_rows = load_profile_bundle_rows()
 
     pages_list = '\n'.join([
         f"- **{p['name']}**: /{p['path']}"
         for p in pages
     ])
+
+    bundle_table = ""
+    if bundle_rows:
+        bundle_table_rows = "\n".join(
+            f"| `{row['bundle_id']}` | {row['bundle_name']} | "
+            f"{row['lifecycle']} | {row['audience']} | "
+            f"{row['data_model']} | {row['database']} |"
+            for row in bundle_rows
+        )
+        bundle_table = f"""
+## Profile Bundles
+
+Use `python scripts/configure.py --bundle <bundle-id> --yes` to stamp the starter noninteractively.
+
+| Bundle | Name | Lifecycle | Audience | Data Model | Database |
+|--------|------|-----------|----------|------------|----------|
+{bundle_table_rows}
+"""
+
+    bundle_block = ""
+    if suite_id:
+        suite_name = config.get("bundleName", suite_id)
+        bundle_block = f'''
+## Profile Bundle
+
+- **Bundle**: {suite_name}
+- **EPAS Lifecycle**: {epas.get("lifecycle", "n/a")}
+- **Audience**: {epas.get("audience", "n/a")}
+- **Environment**: {epas.get("environment", "n/a")}
+- **Data Model**: {epas.get("data_model", "n/a")}
+- **Primary Stack**: {stack.get("database", "current starter stack")}
+'''
 
     readme = f'''# {name}
 
@@ -613,10 +713,16 @@ make reset           # Reset everything
 This project was configured with:
 - **Primary Color**: {color}
 - **Pages**: {', '.join(p['name'] for p in pages)}
+{bundle_block}
 
 To reconfigure, edit `quickstart.config.json` and run:
 ```bash
 python scripts/configure.py --from-file
+```
+
+To apply a profile bundle, run:
+```bash
+python scripts/configure.py --bundle <bundle-id> --yes
 ```
 
 Or run interactively:
@@ -641,13 +747,52 @@ def print_summary(config: dict[str, Any]):
     print(f"  Description:   {Colors.GREEN}{config['description']}{Colors.NC}")
     print(f"  Primary Color: {Colors.GREEN}{config['primaryColor']}{Colors.NC}")
     print(f"  Pages:         {Colors.GREEN}{', '.join(p['name'] for p in config['pages'])}{Colors.NC}")
+    if config.get("bundleId"):
+        print(f"  Bundle:        {Colors.GREEN}{config['bundleId']}{Colors.NC}")
+    epas = config.get("epas", {})
+    composed = epas.get("composed_from", {}) if isinstance(epas, dict) else {}
+    if composed:
+        print(
+            f"  EPAS Layer:    {Colors.GREEN}"
+            f"{composed.get('lifecycle', 'n/a')} / "
+            f"{composed.get('audience', 'n/a')} / "
+            f"{composed.get('data_model', 'n/a')}{Colors.NC}"
+        )
     print(f"{Colors.YELLOW}{'━' * 60}{Colors.NC}")
 
 
 def main():
+    global AUTO_CONFIRM
     os.chdir(Path(__file__).parent.parent)  # Change to project root
+    args = sys.argv[1:]
+    AUTO_CONFIRM = "--yes" in args or "-y" in args
 
-    if '--from-file' in sys.argv:
+    bundle_id = None
+    for idx, arg in enumerate(args):
+        if arg == "--bundle" and idx + 1 < len(args):
+            bundle_id = args[idx + 1]
+        elif arg.startswith("--bundle="):
+            bundle_id = arg.split("=", 1)[1]
+
+    if "--list-bundles" in args:
+        print_banner()
+        bundles = list_profile_bundles()
+        if not bundles:
+            print("No profile bundles found in profiles/.")
+        else:
+            print("Available profile bundles:\n")
+            for bundle in bundles:
+                print(f"  - {bundle}")
+        return
+
+    if bundle_id:
+        print_banner()
+        config = load_config_from_bundle(bundle_id)
+        print_summary(config)
+        if prompt_yes_no("\nApply this profile bundle?", True):
+            save_config(config)
+            apply_config(config)
+    elif '--from-file' in sys.argv:
         # Load from config file
         print_banner()
         config = load_config_from_file()
@@ -658,8 +803,8 @@ def main():
         # Reset to defaults
         print_banner()
         config = {
-            'projectName': 'Cradle',
-            'description': 'Enterprise Multi-Platform Architecture',
+            'projectName': 'EPAS Starter',
+            'description': 'EPAS reference implementation starter',
             'primaryColor': 'blue',
             'pages': [
                 {'name': 'Dashboard', 'path': 'dashboard', 'icon': 'home', 'description': 'Main dashboard'},

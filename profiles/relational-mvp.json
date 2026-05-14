@@ -1,0 +1,48 @@
+{
+  "bundleId": "relational-mvp",
+  "bundleName": "EPAS MVP - Relational",
+  "projectName": "EPAS MVP",
+  "description": "MVP starter for relational-operational applications.",
+  "primaryColor": "blue",
+  "pages": [
+    { "name": "Dashboard", "path": "dashboard", "icon": "home", "description": "MVP dashboard" },
+    { "name": "Workspace", "path": "workspace", "icon": "folder", "description": "Active work items" },
+    { "name": "Runs", "path": "runs", "icon": "chart-bar", "description": "Execution history" },
+    { "name": "Integrations", "path": "integrations", "icon": "puzzle", "description": "External integrations" },
+    { "name": "Settings", "path": "settings", "icon": "cog", "description": "Project settings" }
+  ],
+  "features": {
+    "aiDisclosure": true,
+    "darkMode": true,
+    "multiTenant": true
+  },
+  "auth": {
+    "defaultEmail": "admin@example.com",
+    "defaultPassword": "password"
+  },
+  "branding": {
+    "logoText": "MVP",
+    "tagline": "Ready for real users"
+  },
+  "epas": {
+    "base_version": "2.0.0",
+    "profile_version": "2.1.0",
+    "lifecycle": "mvp",
+    "audience": "customer_facing",
+    "environment": "staging_uat",
+    "governance": "g1_guided",
+    "infrastructure": "i2_platform_runtime",
+    "data_model": "relational_operational",
+    "delivery": "sdk_first",
+    "architecture": "modular_monolith"
+  },
+  "stack": {
+    "backend": "FastAPI",
+    "frontend": "Next.js",
+    "database": "PostgreSQL",
+    "eventing": "NATS-ready event log",
+    "auth": "OIDC-ready",
+    "storage": "Managed S3-compatible object store",
+    "notes": "Best default for shipping a real product."
+  }
+}

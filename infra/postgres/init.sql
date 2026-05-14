@@ -1,4 +1,4 @@
--- Cradle Database Initialization
+-- EPAS Prototype Database Initialization
 -- This script runs on first container startup
 
 -- Enable extensions
@@ -92,5 +92,5 @@ VALUES (
 );
 
 -- Grant permissions
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO cradle;
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO cradle;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO epas_prototype;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO epas_prototype;

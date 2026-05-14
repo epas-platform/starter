@@ -16,7 +16,7 @@ from app.models.base import Base
 
 
 # Test database URL (use separate test database)
-TEST_DATABASE_URL = "postgresql+asyncpg://cradle:cradle@localhost:5432/cradle_test"
+TEST_DATABASE_URL = "postgresql+asyncpg://epas_prototype:epas_prototype@localhost:5432/epas_prototype_test"
 
 
 @pytest.fixture(scope="session")

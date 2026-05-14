@@ -37,7 +37,7 @@ class Settings(BaseSettings):
     profile: str = Field(default="dev", alias="PROFILE")
 
     # App
-    app_name: str = "Cradle"
+    app_name: str = "EPAS Prototype"
     debug: bool = False
     docs_enabled: bool = True
 
@@ -47,7 +47,7 @@ class Settings(BaseSettings):
 
     # Database
     database_url: str = Field(
-        default="postgresql+asyncpg://cradle:cradle@localhost:5432/cradle",
+        default="postgresql+asyncpg://epas_prototype:epas_prototype@localhost:5432/epas_prototype",
         alias="DATABASE_URL",
     )
 
@@ -61,8 +61,8 @@ class Settings(BaseSettings):
     aws_secret_access_key: str = Field(default="test", alias="AWS_SECRET_ACCESS_KEY")
 
     # S3 Buckets
-    s3_uploads_bucket: str = "cradle-uploads"
-    s3_exports_bucket: str = "cradle-exports"
+    s3_uploads_bucket: str = "epas-prototype-uploads"
+    s3_exports_bucket: str = "epas-prototype-exports"
 
     # JWT
     jwt_secret: str = Field(

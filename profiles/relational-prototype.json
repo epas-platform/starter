@@ -5,30 +5,10 @@
   "description": "Prototype starter for relational-operational applications.",
   "primaryColor": "green",
   "pages": [
-    {
-      "name": "Dashboard",
-      "path": "dashboard",
-      "icon": "home",
-      "description": "Prototype dashboard"
-    },
-    {
-      "name": "Workspaces",
-      "path": "workspaces",
-      "icon": "folder",
-      "description": "Projects and workspaces"
-    },
-    {
-      "name": "Runs",
-      "path": "runs",
-      "icon": "chart-bar",
-      "description": "Prototype runs and outputs"
-    },
-    {
-      "name": "Settings",
-      "path": "settings",
-      "icon": "cog",
-      "description": "Project settings"
-    }
+    { "name": "Dashboard", "path": "dashboard", "icon": "home", "description": "Prototype dashboard" },
+    { "name": "Workspaces", "path": "workspaces", "icon": "folder", "description": "Projects and workspaces" },
+    { "name": "Runs", "path": "runs", "icon": "chart-bar", "description": "Prototype runs and outputs" },
+    { "name": "Settings", "path": "settings", "icon": "cog", "description": "Project settings" }
   ],
   "features": {
     "aiDisclosure": true,

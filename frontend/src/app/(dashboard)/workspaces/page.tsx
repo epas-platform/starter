@@ -1,17 +1,17 @@
 'use client';
 
-export default function SettingsPage() {
+export default function WorkspacesPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Settings
+          Workspaces
         </h2>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <p className="text-gray-600 dark:text-gray-400">
-          Settings page content goes here.
+          Workspaces page content goes here.
         </p>
       </div>
     </div>

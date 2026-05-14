@@ -1,0 +1,48 @@
+{
+  "bundleId": "relational-production",
+  "bundleName": "EPAS Production - Relational",
+  "projectName": "EPAS Production",
+  "description": "Production starter for relational-operational applications.",
+  "primaryColor": "gray",
+  "pages": [
+    { "name": "Dashboard", "path": "dashboard", "icon": "home", "description": "Operations dashboard" },
+    { "name": "Runs", "path": "runs", "icon": "chart-bar", "description": "Production runs" },
+    { "name": "Audit", "path": "audit", "icon": "document", "description": "Audit and evidence" },
+    { "name": "Tenants", "path": "tenants", "icon": "users", "description": "Tenant administration" },
+    { "name": "Settings", "path": "settings", "icon": "cog", "description": "Project settings" }
+  ],
+  "features": {
+    "aiDisclosure": true,
+    "darkMode": true,
+    "multiTenant": true
+  },
+  "auth": {
+    "defaultEmail": "admin@example.com",
+    "defaultPassword": "password"
+  },
+  "branding": {
+    "logoText": "Production",
+    "tagline": "Hardened and auditable"
+  },
+  "epas": {
+    "base_version": "2.0.0",
+    "profile_version": "2.1.0",
+    "lifecycle": "production",
+    "audience": "customer_facing",
+    "environment": "production",
+    "governance": "g2_operational",
+    "infrastructure": "i3_enterprise_multi_env",
+    "data_model": "relational_operational",
+    "delivery": "sdk_first",
+    "architecture": "service_oriented"
+  },
+  "stack": {
+    "backend": "FastAPI",
+    "frontend": "Next.js",
+    "database": "PostgreSQL",
+    "eventing": "NATS JetStream",
+    "auth": "OIDC + delegated approval",
+    "storage": "Managed S3-compatible object store",
+    "notes": "Production hardening profile."
+  }
+}

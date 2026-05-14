@@ -1,7 +1,7 @@
 services:
   # FastAPI Backend
   backend:
-    container_name: cradle-backend
+    container_name: epas-prototype-backend
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -12,7 +12,7 @@ services:
       - ./config:/app/config:ro
     environment:
       - PROFILE=dev
-      - DATABASE_URL=postgresql+asyncpg://cradle:cradle@postgres:5432/cradle
+      - DATABASE_URL=postgresql+asyncpg://epas_prototype:epas_prototype@postgres:5432/epas_prototype
       - REDIS_URL=redis://redis:6379/0
       - AWS_ENDPOINT_URL=http://localstack:4566
       - AWS_ACCESS_KEY_ID=test
@@ -34,11 +34,11 @@ services:
       start_period: 10s
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     networks:
-      - cradle-network
+      - epas-prototype-network
 
   # Next.js Frontend
   frontend:
-    container_name: cradle-frontend
+    container_name: epas-prototype-frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -54,37 +54,37 @@ services:
       - backend
     command: npm run dev
     networks:
-      - cradle-network
+      - epas-prototype-network
 
   # PostgreSQL Database
   postgres:
-    container_name: cradle-postgres
+    container_name: epas-prototype-postgres
     image: postgres:15-alpine
     ports:
       - "5442:5432"
     environment:
-      POSTGRES_USER: cradle
-      POSTGRES_PASSWORD: cradle
-      POSTGRES_DB: cradle
+      POSTGRES_USER: epas_prototype
+      POSTGRES_PASSWORD: epas_prototype
+      POSTGRES_DB: epas_prototype
     volumes:
-      - cradle_postgres_data:/var/lib/postgresql/data
+      - epas_prototype_postgres_data:/var/lib/postgresql/data
       - ./infra/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U cradle"]
+      test: ["CMD-SHELL", "pg_isready -U epas_prototype"]
       interval: 5s
       timeout: 5s
       retries: 5
     networks:
-      - cradle-network
+      - epas-prototype-network
 
   # Redis Cache
   redis:
-    container_name: cradle-redis
+    container_name: epas-prototype-redis
     image: redis:7-alpine
     ports:
       - "6389:6379"
     volumes:
-      - cradle_redis_data:/data
+      - epas_prototype_redis_data:/data
     command: redis-server --appendonly yes
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
@@ -92,11 +92,11 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - cradle-network
+      - epas-prototype-network
 
   # LocalStack (AWS Emulation)
   localstack:
-    container_name: cradle-localstack
+    container_name: epas-prototype-localstack
     image: localstack/localstack:3.0
     ports:
       - "4576:4566"
@@ -105,7 +105,7 @@ services:
       - DEBUG=0
       - DOCKER_HOST=unix:///var/run/docker.sock
     volumes:
-      - cradle_localstack_data:/var/lib/localstack
+      - epas_prototype_localstack_data:/var/lib/localstack
       - ./infra/localstack/init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh:ro
       - /var/run/docker.sock:/var/run/docker.sock
     healthcheck:
@@ -114,11 +114,11 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - cradle-network
+      - epas-prototype-network
 
 networks:
-  cradle-network:
-    name: cradle-network
+  epas-prototype-network:
+    name: epas-prototype-network
     driver: bridge
     ipam:
       driver: default
@@ -126,6 +126,6 @@ networks:
         - subnet: 172.28.0.0/16
 
 volumes:
-  cradle_postgres_data:
-  cradle_redis_data:
-  cradle_localstack_data:
+  epas_prototype_postgres_data:
+  epas_prototype_redis_data:
+  epas_prototype_localstack_data:

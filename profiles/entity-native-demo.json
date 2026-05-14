@@ -1,0 +1,49 @@
+{
+  "bundleId": "entity-native-demo",
+  "bundleName": "EPAS Demo - Entity Native",
+  "projectName": "EPAS Demo",
+  "description": "Demo starter for entity-and-relationship-native applications.",
+  "primaryColor": "teal",
+  "pages": [
+    { "name": "Dashboard", "path": "dashboard", "icon": "home", "description": "Demo dashboard" },
+    { "name": "Graph", "path": "graph", "icon": "chart-bar", "description": "Entity graph explorer" },
+    { "name": "Memory", "path": "memory", "icon": "document", "description": "Agent memory and history" },
+    { "name": "Runs", "path": "runs", "icon": "chart-bar", "description": "Demo runs and outputs" },
+    { "name": "Settings", "path": "settings", "icon": "cog", "description": "Project settings" }
+  ],
+  "features": {
+    "aiDisclosure": true,
+    "darkMode": true,
+    "multiTenant": false
+  },
+  "auth": {
+    "defaultEmail": "admin@example.com",
+    "defaultPassword": "password"
+  },
+  "branding": {
+    "logoText": "Entity Demo",
+    "tagline": "Make the relationship model obvious"
+  },
+  "epas": {
+    "base_version": "2.0.0",
+    "profile_version": "2.1.0",
+    "lifecycle": "demo",
+    "audience": "internal_platform",
+    "environment": "shared_dev",
+    "governance": "g1_guided",
+    "infrastructure": "i1_simple_runtime",
+    "data_model": "entity_relationship_native",
+    "delivery": "sdk_first",
+    "architecture": "modular_monolith",
+    "overlays": ["entity_native_agentic"]
+  },
+  "stack": {
+    "backend": "FastAPI",
+    "frontend": "Next.js",
+    "database": "SurrealDB",
+    "eventing": "DB-backed event log",
+    "auth": "guided auth flow",
+    "storage": "S3-compatible object store",
+    "notes": "Good for polished relationship-heavy demos."
+  }
+}

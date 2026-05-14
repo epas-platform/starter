@@ -1,0 +1,49 @@
+{
+  "bundleId": "entity-native-production",
+  "bundleName": "EPAS Production - Entity Native",
+  "projectName": "EPAS Production",
+  "description": "Production starter for entity-and-relationship-native applications.",
+  "primaryColor": "indigo",
+  "pages": [
+    { "name": "Dashboard", "path": "dashboard", "icon": "home", "description": "Operations dashboard" },
+    { "name": "Graph", "path": "graph", "icon": "chart-bar", "description": "Relationship graph" },
+    { "name": "Audit", "path": "audit", "icon": "document", "description": "Audit and evidence" },
+    { "name": "Policy", "path": "policy", "icon": "users", "description": "Policy and approvals" },
+    { "name": "Settings", "path": "settings", "icon": "cog", "description": "Project settings" }
+  ],
+  "features": {
+    "aiDisclosure": true,
+    "darkMode": true,
+    "multiTenant": true
+  },
+  "auth": {
+    "defaultEmail": "admin@example.com",
+    "defaultPassword": "password"
+  },
+  "branding": {
+    "logoText": "Entity Production",
+    "tagline": "Relationship-native and auditable"
+  },
+  "epas": {
+    "base_version": "2.0.0",
+    "profile_version": "2.1.0",
+    "lifecycle": "production",
+    "audience": "customer_facing",
+    "environment": "production",
+    "governance": "g2_operational",
+    "infrastructure": "i3_enterprise_multi_env",
+    "data_model": "entity_relationship_native",
+    "delivery": "sdk_first",
+    "architecture": "service_oriented",
+    "overlays": ["entity_native_agentic", "regulated"]
+  },
+  "stack": {
+    "backend": "FastAPI",
+    "frontend": "Next.js",
+    "database": "SurrealDB",
+    "eventing": "NATS JetStream",
+    "auth": "OIDC + delegated approval",
+    "storage": "Managed S3-compatible object store",
+    "notes": "Production hardening profile for entity-native systems."
+  }
+}
