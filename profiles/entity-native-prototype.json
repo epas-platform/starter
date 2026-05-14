@@ -1,0 +1,49 @@
+{
+  "bundleId": "entity-native-prototype",
+  "bundleName": "EPAS Prototype - Entity Native",
+  "projectName": "EPAS Prototype",
+  "description": "Prototype starter for entity-and-relationship-native applications.",
+  "primaryColor": "cyan",
+  "pages": [
+    { "name": "Dashboard", "path": "dashboard", "icon": "home", "description": "Prototype dashboard" },
+    { "name": "Entities", "path": "entities", "icon": "folder", "description": "Entity explorer" },
+    { "name": "Relations", "path": "relations", "icon": "puzzle", "description": "Relationship graph" },
+    { "name": "Runs", "path": "runs", "icon": "chart-bar", "description": "Prototype runs and outputs" },
+    { "name": "Settings", "path": "settings", "icon": "cog", "description": "Project settings" }
+  ],
+  "features": {
+    "aiDisclosure": true,
+    "darkMode": true,
+    "multiTenant": false
+  },
+  "auth": {
+    "defaultEmail": "admin@example.com",
+    "defaultPassword": "password"
+  },
+  "branding": {
+    "logoText": "Entity Native",
+    "tagline": "Model relationships first"
+  },
+  "epas": {
+    "base_version": "2.0.0",
+    "profile_version": "2.1.0",
+    "lifecycle": "prototype",
+    "audience": "internal_platform",
+    "environment": "local_dev",
+    "governance": "g0_exploratory",
+    "infrastructure": "i0_local_compose",
+    "data_model": "entity_relationship_native",
+    "delivery": "sdk_first",
+    "architecture": "modular_monolith",
+    "overlays": ["entity_native_agentic"]
+  },
+  "stack": {
+    "backend": "FastAPI",
+    "frontend": "Next.js",
+    "database": "SurrealDB",
+    "eventing": "DB-backed event log",
+    "auth": "stubbed/local-dev",
+    "storage": "Local filesystem or S3-compatible bucket",
+    "notes": "Target stack for entity-native teams; current runtime scaffold remains the starter baseline until the persistence adapter is swapped."
+  }
+}

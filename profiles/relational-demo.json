@@ -1,0 +1,48 @@
+{
+  "bundleId": "relational-demo",
+  "bundleName": "EPAS Demo - Relational",
+  "projectName": "EPAS Demo",
+  "description": "Demo starter for relational-operational applications.",
+  "primaryColor": "teal",
+  "pages": [
+    { "name": "Dashboard", "path": "dashboard", "icon": "home", "description": "Demo dashboard" },
+    { "name": "Scenarios", "path": "scenarios", "icon": "document", "description": "Scenario walkthroughs" },
+    { "name": "Runs", "path": "runs", "icon": "chart-bar", "description": "Demo runs and outputs" },
+    { "name": "Audit", "path": "audit", "icon": "users", "description": "Visible audit trail" },
+    { "name": "Settings", "path": "settings", "icon": "cog", "description": "Project settings" }
+  ],
+  "features": {
+    "aiDisclosure": true,
+    "darkMode": true,
+    "multiTenant": false
+  },
+  "auth": {
+    "defaultEmail": "admin@example.com",
+    "defaultPassword": "password"
+  },
+  "branding": {
+    "logoText": "Demo",
+    "tagline": "Show the workflow clearly"
+  },
+  "epas": {
+    "base_version": "2.0.0",
+    "profile_version": "2.1.0",
+    "lifecycle": "demo",
+    "audience": "internal_platform",
+    "environment": "shared_dev",
+    "governance": "g1_guided",
+    "infrastructure": "i1_simple_runtime",
+    "data_model": "relational_operational",
+    "delivery": "sdk_first",
+    "architecture": "modular_monolith"
+  },
+  "stack": {
+    "backend": "FastAPI",
+    "frontend": "Next.js",
+    "database": "PostgreSQL",
+    "eventing": "DB-backed event log",
+    "auth": "guided auth flow",
+    "storage": "LocalStack S3",
+    "notes": "Good for polished internal demos."
+  }
+}

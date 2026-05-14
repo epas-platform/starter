@@ -38,8 +38,8 @@ auth:
 aws:
   region: us-east-1
   s3:
-    uploads_bucket: cradle-uploads
-    exports_bucket: cradle-exports
+    uploads_bucket: epas-prototype-uploads
+    exports_bucket: epas-prototype-exports
 
 logging:
   level: INFO

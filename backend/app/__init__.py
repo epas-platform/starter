@@ -1,3 +1,3 @@
-"""Cradle Backend Application."""
+"""EPAS Prototype Backend Application."""
 
 __version__ = "0.1.0"

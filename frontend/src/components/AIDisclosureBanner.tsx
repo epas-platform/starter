@@ -25,11 +25,11 @@ export function AIDisclosureBanner() {
   return (
     <div
       role="alert"
-      className="fixed bottom-0 left-0 right-0 bg-blue-50 dark:bg-blue-900/50 border-t border-blue-200 dark:border-blue-800 p-4"
+      className="fixed bottom-0 left-0 right-0 bg-green-50 dark:bg-green-900/50 border-t border-green-200 dark:border-green-800 p-4"
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <span className="text-blue-600 dark:text-blue-400">
+          <span className="text-green-600 dark:text-green-400">
             <svg
               className="w-5 h-5"
               fill="none"
@@ -45,17 +45,17 @@ export function AIDisclosureBanner() {
             </svg>
           </span>
           <div>
-            <p className="text-sm font-medium text-blue-800 dark:text-blue-200">
+            <p className="text-sm font-medium text-green-800 dark:text-green-200">
               AI Disclosure
             </p>
-            <p className="text-sm text-blue-600 dark:text-blue-300">
+            <p className="text-sm text-green-600 dark:text-green-300">
               This session used AI-powered features: {aiFeatures.join(', ')}
             </p>
           </div>
         </div>
         <button
           onClick={() => setDismissed(true)}
-          className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 underline"
+          className="text-sm text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-200 underline"
         >
           Acknowledge
         </button>

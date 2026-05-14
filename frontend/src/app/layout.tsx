@@ -7,8 +7,8 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Cradle',
-  description: 'Enterprise Multi-Platform Architecture',
+  title: 'EPAS Prototype',
+  description: 'Prototype starter for relational-operational applications.',
 };
 
 export default function RootLayout({

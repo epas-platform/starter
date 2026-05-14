@@ -147,7 +147,7 @@ export default function DashboardPage() {
         <CardHeader>
           <CardTitle>Getting Started</CardTitle>
           <CardDescription>
-            Welcome to Cradle! This is a quickstart boilerplate based on the Enterprise
+            Welcome to EPAS Prototype! This is a quickstart boilerplate based on the Enterprise
             Multi-Platform Architecture Specification.
           </CardDescription>
         </CardHeader>

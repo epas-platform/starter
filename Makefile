@@ -2,7 +2,7 @@
 
 # Default target
 help:
-	@echo "Cradle Development Commands"
+	@echo "EPAS Prototype Development Commands"
 	@echo ""
 	@echo "  make up              Start all services in background"
 	@echo "  make up-attached     Start all services with logs attached"
@@ -49,7 +49,7 @@ shell-frontend:
 	docker compose exec frontend /bin/sh
 
 shell-db:
-	docker compose exec postgres psql -U cradle -d cradle
+	docker compose exec postgres psql -U epas_prototype -d epas_prototype
 
 # Development
 test:
