@@ -1,0 +1,20 @@
+# Default owner for everything in the repo.
+* @nwalker85
+
+# Backend (FastAPI)
+/backend/             @nwalker85
+
+# Frontend (Next.js)
+/frontend/            @nwalker85
+
+# Profile bundles — keep all variants consistent
+/profiles/            @nwalker85
+
+# Infrastructure & ops
+/infra/               @nwalker85
+/config/              @nwalker85
+/scripts/             @nwalker85
+/.github/             @nwalker85
+
+# Docs
+/docs/                @nwalker85

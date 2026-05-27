@@ -83,6 +83,14 @@ Or run interactively:
 python scripts/configure.py
 ```
 
+## Documentation
+
+- Gap analysis vs target state: [`docs/gap-analysis.md`](docs/gap-analysis.md)
+- Planning material: [`docs/planning/`](docs/planning/)
+- Contributing: [`CONTRIBUTING.md`](CONTRIBUTING.md)
+- Security: [`SECURITY.md`](SECURITY.md)
+- Release history: [`CHANGELOG.md`](CHANGELOG.md)
+
 ## License
 
-MIT
+Apache 2.0 — see [`LICENSE`](LICENSE).
